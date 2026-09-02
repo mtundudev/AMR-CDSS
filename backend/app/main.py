@@ -1,16 +1,12 @@
 from fastapi import FastAPI
 
-from app.api.v1.routers import pathogens,patient,antibiotic
+from app.api.v1.routers import detection
 
 app=FastAPI(title="Clinical Decision Support System Backend")
 
 
 
-app.include_router(patient.router)
-
-app.include_router(pathogens.router)
-app.include_router(antibiotic.router)
-
+app.include_router(detection.router)
 
 @app.get("/test")
 def test():
