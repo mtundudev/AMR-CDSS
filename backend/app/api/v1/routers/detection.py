@@ -7,7 +7,7 @@ from fastapi import HTTPException,status
 
 router=APIRouter(prefix="/image",tags=["Image analysis"])
 
-@router.post("")
+@router.post("/")
 async def uplaod_image(file:UploadFile=File(...)):
     allowed_extensions={
         ".png",".jpg","jpeg"

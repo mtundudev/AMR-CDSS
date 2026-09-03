@@ -3,6 +3,7 @@ from io import BytesIO
 from PIL import Image
 
 def image_analysis(image_bytes:bytes):
+    
     image=Image.open(BytesIO(image_bytes)).convert("RGB")
     
     results=model.predict(
