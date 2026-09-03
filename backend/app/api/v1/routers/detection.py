@@ -1,14 +1,17 @@
 from app.services.ml_services import image_analysis
-from fastapi import APIRouter,File,UploadFile
+from fastapi import APIRouter,File,UploadFile,HTTPException,status,Depends
 from pathlib import Path
-from fastapi import HTTPException,status
+from app.models.user import User,UserRole
+from app.core.dependencies import get_current_user
 
 
 
 router=APIRouter(prefix="/image",tags=["Image analysis"])
 
 @router.post("")
-async def uplaod_image(file:UploadFile=File(...)):
+async def uplaod_image(file:UploadFile=File(...),Current_user:User=Depends(get_current_user)):
+    if Current_user.role not in  (UserRole.LAB_TECHNICIAN,UserRole.ADMIN):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="you not have action to perform this")
     allowed_extensions={
         ".png",".jpg","jpeg"
         
