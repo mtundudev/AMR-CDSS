@@ -1,18 +1,30 @@
 from app.services.ml_services import image_analysis
 from app.services.patient import Patient_Services
-from fastapi import APIRouter,File,UploadFile,Depends
+from fastapi import APIRouter,File,UploadFile,HTTPException,status,Depends,Depends
 from pathlib import Path
 from fastapi import HTTPException,status
-from app.services.storage.storage import IMAGE_TYPES,UploadCatgory,save_upload_file
-from app.core.database import get_db
-from sqlalchemy.orm import Session
+
 
 
 router=APIRouter(prefix="/image",tags=["Image analysis"])
 
-@router.post("/{patient_id}")
-async def uplaod_image(patient_id:int,db:Session=Depends(get_db),file:UploadFile=File(...)):
-
+@router.post("")
+async def uplaod_image(file:UploadFile=File(...)):
+    allowed_extensions={
+        ".png",".jpg","jpeg"
+        
+    }
+    extension=Path(file.filename).suffix.lower()
+    if extension not in allowed_extensions:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="only image")
+    if not file.content_type:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="check your uploaded file")
+    
+    UPLOAD_DIR=Path("uploads/model/images")
+    UPLOAD_DIR.mkdir(parents=True,exist_ok=True)
+    
+    file_path=UPLOAD_DIR/file.filename
+    
     
     image=await file.read()
     analysis=image_analysis(image)
