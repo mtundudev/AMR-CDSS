@@ -11,6 +11,7 @@ __pycache__/
 venv/
 ENV/
 env/
+.env
 
 # Model weights & Checkpoints (Heavy Files)
 *.pt
@@ -19,6 +20,9 @@ env/
 *.pkl
 *.joblib
 *.h5
+uploads/
+uploads/*
+
 
 # Large Dataset files & Logs
 *.csv
