@@ -1,0 +1,44 @@
+from pydantic import BaseModel, EmailStr, field_validator
+from app.models.user import UserRole
+from datetime import datetime
+from typing import Optional
+
+class UserCreate(BaseModel):
+    full_name: str
+    email: EmailStr
+    password: str
+    role: UserRole
+
+    @field_validator("password")
+    @classmethod
+    def password_min_length(cls, value: str) -> str:
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return value
+
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str]=None
+    email: Optional[EmailStr]=None
+    password: Optional[str]=None
+    role: Optional[UserRole]=None
+
+    @field_validator("password")
+    @classmethod
+    def password_min_length(cls, value: str) -> str:
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return value
+    
+    
+class UserResponse(BaseModel):
+    id: int
+    full_name: str
+    email: EmailStr
+    role: UserRole
+    is_active: bool
+    created_at:datetime
+    updated_at:datetime
+
+    class Config:
+        from_attributes = True
