@@ -1,9 +1,11 @@
 from sqlalchemy.orm import Session
 from app.models.patient import Patient
+from app.models import media
 from app.schemas.patient import PatientCreate,PatientUpdate
 from datetime import date
 from app.models.user import UserRole
 from fastapi import HTTPException,status
+from app.services.storage.storage import delete_upload_file
 
 def auto_patient_code(patient_id: int):
     return f"HOSP-PAT-{patient_id:06d}"
@@ -90,3 +92,50 @@ class Patient_Services():
         return {
         "message":"patient info deleted"
     }
+
+    #image services
+    @staticmethod
+    def create_image(patent_id:int,db:Session,path:str):
+
+        patient= db.query(Patient).filter(Patient.id == patent_id).first()
+
+        if not patient:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="user not found"
+            )
+        image_cover = db.query(media.Media).filter(
+            media.Media.id == patient.image_id
+        ).first()
+
+        if image_cover:
+            image_cover.file_name = path
+            delete_upload_file(image_cover.file_path)
+            image_cover.file_path = path
+            db.commit()
+            db.refresh(image_cover)
+
+        else:
+            image_cover = media.Media(
+                file_name = path,
+                file_path = path,
+
+            )
+
+            db.add(image_cover)
+            db.flush()
+            patient.image_id = image_cover.id
+
+            db.commit()
+            db.refresh(image_cover)
+
+            return image_cover
+
+
+
+
+
+
+
+
+
