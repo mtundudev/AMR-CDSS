@@ -1,5 +1,6 @@
 import enum
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 from datetime import datetime
 
@@ -19,3 +20,6 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime,default=datetime.now)
     updated_at=Column(DateTime,default=datetime.now,onupdate=datetime.now)
+    
+    visit= relationship("ClinicalVisit",back_populates="user")
+    patient=relationship("Patient",back_populates="user")

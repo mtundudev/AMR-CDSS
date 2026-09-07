@@ -19,9 +19,11 @@ class Patient(Base):
     gender = Column(Enum(Gender), nullable=False)
     age=Column(Integer,nullable=True)
     phone_number = Column(String(20), nullable=True)
+    created_by=Column(Integer,ForeignKey("users.id"))
     address = Column(String(255), nullable=True)
     image_id = Column(Integer,ForeignKey("media.id"))
     created_at = Column(DateTime,default=datetime.now())
     updated_at=Column(DateTime,default=datetime.now,onupdate=datetime.now)
 
     media = relationship("Media",back_populates="patient")
+    user=relationship("User",back_populates="patient")

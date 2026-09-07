@@ -12,5 +12,6 @@ bcrypt
 python-multipart
 pillow
 ultralytics
+timm
 pwdlib[argon2]
 pydantic[email]
