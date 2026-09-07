@@ -38,6 +38,7 @@ class PatientResponse(BaseModel):
     full_name: str
     date_of_birth: date
     age:int
+    created_by:int
     gender: Gender
     phone_number: Optional[str]
     address: Optional[str]

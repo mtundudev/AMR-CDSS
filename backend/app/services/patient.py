@@ -31,6 +31,7 @@ class Patient_Services():
             date_of_birth=data.date_of_birth,
             age=calc_age(data.date_of_birth),
             gender=data.gender,
+            created_by=current_user.id,
             phone_number=data.phone_number
         )
         
