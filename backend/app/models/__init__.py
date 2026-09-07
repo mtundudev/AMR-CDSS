@@ -5,11 +5,13 @@ from app.models.user import User
 from app.models.patient import Patient
 from app.models.media import Media
 from app.models.clinical_visit import ClinicalVisit
+from app.models.antinicrobial import Antimicrobial
+from app.models.pathogen import Pathogen
 
 
 
 
-__all__=["Base","User","Patient","Media","ClinicalVisit"]
+__all__=["Base","User","Patient","Media","ClinicalVisit","Pathogen","Antimicrobial"]
 
 
 

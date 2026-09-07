@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 
-from app.api.v1.routers import detection,auth,patient,clinical_visit
+from app.api.v1.routers import detection,auth,patient,clinical_visit,pathogen,antimicrobial
 
 app=FastAPI(title="Clinical Decision Support System Backend")
 
@@ -11,6 +11,8 @@ app=FastAPI(title="Clinical Decision Support System Backend")
 app.include_router(auth.router)
 app.include_router(patient.router)
 app.include_router(clinical_visit.router)
+app.include_router(pathogen.router)
+app.include_router(antimicrobial.router)
 app.include_router(detection.router)
 
 
