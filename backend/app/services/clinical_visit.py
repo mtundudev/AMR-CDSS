@@ -7,22 +7,17 @@ from app.models.user import User, UserRole
 from app.schemas.clinical_visit import ClinicalVisitCreate, ClinicalVisitDiagnosisUpdate
 
 
-def create_visit(db: Session, data: ClinicalVisitCreate):
+def create_visit(db: Session, current_user,data: ClinicalVisitCreate):
     patient = db.query(Patient).filter(Patient.id == data.patient_id).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient not found")
-
-    if data.physician_id is not None:
-        physician = db.query(User).filter(
-            User.id == data.physician_id, User.role == UserRole.PHYSICIAN
-        ).first()
-        if not physician:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="physician_id does not refer to a valid physician")
+    if current_user.role != UserRole.DOCTOR:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZEDT, detail="access denied")
 
     visit = ClinicalVisit(
         patient_id=data.patient_id,
-        physician_id=data.physician_id,
-        chief_complaint=data.chief_complaint,
+        physician_id=current_user.id,
+        symptoms=data.symptoms,
         notes=data.notes,
         status=VisitStatus.PENDING_ANALYSIS,
     )
@@ -55,15 +50,15 @@ def list_visits_by_status(db: Session, status_filter: VisitStatus | None, skip: 
     return query.order_by(ClinicalVisit.visit_date.desc()).offset(skip).limit(limit).all()
 
 
-def assign_physician(db: Session, visit_id: int, physician_id: int):
+def assign_physician(db: Session,current_user, visit_id: int):
     visit = get_visit(db, visit_id)
     physician = db.query(User).filter(
-        User.id == physician_id, User.role == UserRole.DOCTOR
+        User.id == current_user.id, User.role == UserRole.DOCTOR
     ).first()
     if not physician:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="physician_id does not refer to a valid physician")
 
-    visit.physician_id = physician_id
+    visit.physician_id = current_user.id
     db.commit()
     db.refresh(visit)
     return visit

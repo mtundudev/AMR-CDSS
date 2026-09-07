@@ -19,7 +19,7 @@ class ClinicalVisit(Base):
     patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False, index=True)
     physician_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     visit_date = Column(DateTime,default=datetime.now)
-    chief_complaint = Column(Text, nullable=True)
+    symptoms = Column(Text, nullable=True)
     diagnosis = Column(Text, nullable=True)
     status = Column(Enum(VisitStatus), nullable=False, default=VisitStatus.PENDING_ANALYSIS)
     notes = Column(Text, nullable=True)

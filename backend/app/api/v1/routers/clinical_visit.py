@@ -19,9 +19,9 @@ router = APIRouter(prefix="/clinical-visits", tags=["Clinical Visits"])
 def create_visit(
     data: ClinicalVisitCreate,
     db: Session = Depends(get_db),
-    user:User=Depends(get_current_user)):
+    current_user:User=Depends(get_current_user)):
 
-    return clinical_visit.create_visit(db, data)
+    return clinical_visit.create_visit(db, current_user,data)
 
 
 @router.get("/{visit_id}", response_model=ClinicalVisitOut)
