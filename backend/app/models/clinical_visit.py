@@ -28,3 +28,5 @@ class ClinicalVisit(Base):
 
     patient = relationship("Patient", backref="visits")
     user= relationship("User", foreign_keys=[physician_id],back_populates="visit")
+    
+    analysis_results = relationship("AnalysisResult",back_populates="visit")

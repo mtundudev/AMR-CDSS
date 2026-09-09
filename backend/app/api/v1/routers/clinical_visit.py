@@ -44,16 +44,6 @@ def list_visits(
 ):
     return clinical_visit.list_visits_by_status(db, status, skip, limit)
 
-
-@router.patch("/{visit_id}/assign-physician", response_model=ClinicalVisitOut)
-def assign_physician(
-    visit_id: int,
-    data: ClinicalVisitAssignPhysician,
-    db: Session = Depends(get_db),
-    user:User=Depends(get_current_user)):
-    return clinical_visit.assign_physician(db, visit_id, data.physician_id)
-
-
 @router.patch("/{visit_id}/diagnosis", response_model=ClinicalVisitOut)
 def submit_diagnosis(
     visit_id: int,
