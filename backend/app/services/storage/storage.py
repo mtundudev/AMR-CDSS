@@ -4,12 +4,6 @@ from fastapi import UploadFile,HTTPException,status
 from pathlib import Path
 from uuid import uuid4
 
-
-
-
-
-
-
 class UploadCatgory(str, Enum):
     AMR_PHOTO = "amr_photo"
 
