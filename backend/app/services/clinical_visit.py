@@ -50,20 +50,6 @@ def list_visits_by_status(db: Session, status_filter: VisitStatus | None, skip: 
     return query.order_by(ClinicalVisit.visit_date.desc()).offset(skip).limit(limit).all()
 
 
-def assign_physician(db: Session,current_user, visit_id: int):
-    visit = get_visit(db, visit_id)
-    physician = db.query(User).filter(
-        User.id == current_user.id, User.role == UserRole.DOCTOR
-    ).first()
-    if not physician:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="physician_id does not refer to a valid physician")
-
-    visit.physician_id = current_user.id
-    db.commit()
-    db.refresh(visit)
-    return visit
-
-
 def submit_diagnosis(db: Session, visit_id: int, data: ClinicalVisitDiagnosisUpdate):
     visit = get_visit(db, visit_id)
 

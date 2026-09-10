@@ -1,6 +1,7 @@
 import enum
 from sqlalchemy import Column, Integer, String, Text, Enum, Boolean, DateTime
-from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from datetime import datetime
 from app.core.database import Base
 
 
@@ -21,5 +22,8 @@ class Pathogen(Base):
     family = Column(Enum(PathogenFamily), nullable=False)
     description = Column(Text, nullable=True)
     common_resistance_profile = Column(Text, nullable=True)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_active = Column(Boolean,default=datetime.now)
+    created_at = Column(DateTime,default=datetime.now,onupdate=datetime.now)
+    
+    analysis = relationship("AnalysisResult",back_populates="pathogen")
+    rules= relationship("ClinicalRule",back_populates="pathogen")

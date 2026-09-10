@@ -1,6 +1,7 @@
 import enum
 from sqlalchemy import Column, Integer, String, Text, Enum, Boolean, DateTime
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -28,3 +29,5 @@ class Antimicrobial(Base):
     route_of_administration = Column(String(50), nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    rules=relationship("ClinicalRule",back_populates="antimicrobial")
